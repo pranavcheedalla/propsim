@@ -10,8 +10,6 @@ cpp/build/
 frontend/node_modules/
 frontend/dist/
 
-# Generated data (regenerate with data/fetch_real_data.py + data/fetch_next_games.py)
-data/propsim.db
 
 # Editor / OS
 .vscode/

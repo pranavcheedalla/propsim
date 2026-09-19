@@ -3,6 +3,5 @@
 cpp/build
 frontend/node_modules
 frontend/dist
-data/propsim.db
 .pytest_cache
 .git

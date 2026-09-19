@@ -30,11 +30,15 @@ COPY backtest/ backtest/
 COPY data/ data/
 COPY backend/ backend/
 
-# Pull real NBA data (nba_api, already in requirements.txt) at build
-# time so the image is self-contained. Requires network access during
-# `docker build`.
-RUN cd data && python3 fetch_real_data.py && python3 fetch_next_games.py
+# data/propsim.db is a committed snapshot (see data/fetch_real_data.py
+# and data/fetch_next_games.py), not regenerated at build time: nba_api's
+# stats.nba.com endpoint is known to block requests from cloud/datacenter
+# IP ranges, which would make the build fail unpredictably on a host
+# like Render/Fly/Railway. Refresh the snapshot from a normal network
+# (it works fine locally) and commit the updated file to update prod.
 
 EXPOSE 8000
 WORKDIR /app/backend
-CMD ["python3", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# $PORT is set by most PaaS hosts (Render, etc.) at runtime; falls back
+# to 8000 for local `docker run`/docker-compose.
+CMD python3 -m uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}

@@ -58,10 +58,22 @@ adjustments) → `cpp/montecarlo.cpp` (Monte Carlo simulation) →
   check whether an edge is consistent or one good year carrying the
   average.
 
-## Running it — Docker (recommended)
+## Deployment
+
+Live: deployed on [Render](https://render.com) from [`render.yaml`](render.yaml)
+(a Blueprint — backend as a Docker web service, frontend as a static
+site). To deploy your own copy: push this repo to your GitHub, then in
+the Render dashboard go to **New +** → **Blueprint** and select it;
+Render reads `render.yaml` and provisions both services. No manual
+config needed beyond that.
+
+The backend's free-tier instance spins down after 15 minutes idle, so
+the first request after a quiet period takes ~30-60s to wake up.
+
+## Running it — Docker
 
 Requires Docker, Docker Compose, and internet access (to pull base
-images from Docker Hub and real data from nba_api/ESPN at build time).
+images from Docker Hub).
 
 ```bash
 docker compose up --build
@@ -71,10 +83,13 @@ Then open:
 - Frontend dashboard: http://localhost:5173
 - Backend API docs (Swagger UI): http://localhost:8000/docs
 
-The backend Dockerfile compiles the C++ engine from source and pulls
-three real NBA seasons + the upcoming schedule into SQLite at build
-time, so the whole stack comes up from a single command with no manual
-setup (the image build takes a few minutes because of that data pull).
+The backend Dockerfile compiles the C++ engine from source and bundles
+the committed `data/propsim.db` snapshot (three real NBA seasons + the
+upcoming schedule) rather than pulling from nba_api at build time:
+`stats.nba.com` is known to block requests from cloud/datacenter IP
+ranges, which would make builds fail unpredictably on most hosts. To
+refresh the snapshot, run the two scripts below from a normal network
+connection and commit the updated `data/propsim.db`.
 
 ## Running it — without Docker
 
