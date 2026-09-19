@@ -1,0 +1,4 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+pybind11==2.13.6
+nba_api==1.11.4
