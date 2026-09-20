@@ -58,18 +58,6 @@ adjustments) → `cpp/montecarlo.cpp` (Monte Carlo simulation) →
   check whether an edge is consistent or one good year carrying the
   average.
 
-## Deployment
-
-Live: deployed on [Render](https://render.com) from [`render.yaml`](render.yaml)
-(a Blueprint — backend as a Docker web service, frontend as a static
-site). To deploy your own copy: push this repo to your GitHub, then in
-the Render dashboard go to **New +** → **Blueprint** and select it;
-Render reads `render.yaml` and provisions both services. No manual
-config needed beyond that.
-
-The backend's free-tier instance spins down after 15 minutes idle, so
-the first request after a quiet period takes ~30-60s to wake up.
-
 ## Running it — Docker
 
 Requires Docker, Docker Compose, and internet access (to pull base
